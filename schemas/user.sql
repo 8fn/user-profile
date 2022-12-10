@@ -1,0 +1,1 @@
+CREATE TABLE `userprofile`.`user` (`id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(45) NOT NULL , `profile_image` VARCHAR(100) NOT NULL , `job_title` VARCHAR(45) NOT NULL , `description` TEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;

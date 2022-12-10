@@ -1,6 +1,7 @@
 const express = require('express')
 const exphbs = require('express-handlebars')
 const fileUpload = require('express-fileupload')
+const mysql = require('mysql');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -18,9 +19,34 @@ const handlebars = exphbs.create({extname: '.hbs'})
 app.engine('hbs', handlebars.engine)
 app.set('view engine', 'hbs')
 
+// Connection Pool
+const pool = mysql.createPool({
+    connectionLimit:10,
+    host:'localhost',
+    user:'root',
+    password:'',
+    database:'userprofile'
+})
+
+pool.getConnection((err,connection) => {
+    if(err) throw err; // not connected
+    console.log('Connected!')
+})
 
 app.get('/', (req,res) => {
-    res.render('index')
+    
+
+    pool.getConnection((err,connection) => {
+        if(err) throw err; // not connected
+        console.log('Connected!')
+        connection.query('select * from user where id = "1"', (err, rows) => {
+            // Once done, release connection
+            connection.release();
+            if(!err){
+                res.render('index', {rows});
+            }
+        })
+    })
 })
 
 
@@ -42,7 +68,22 @@ app.post('/', (req,res) => {
    sampleFile.mv(uploadPath, function(err){
     if(err) return res.status(500).send(err);
 
-    res.send('File Uploaded!')
+    // res.send('File Uploaded!')
+
+    pool.getConnection((err,connection) => {
+        if(err) throw err; // not connected
+        console.log('Connected!')
+        connection.query('update user SET profile_image = ? WHERE id = "1"', [sampleFile.name], (err, rows) => {
+            // Once done, release connection
+            connection.release();
+            if(!err){
+                res.redirect('/');
+            } else {
+                console.log(err)
+            }
+        })
+    })
+
    })
 })
 
