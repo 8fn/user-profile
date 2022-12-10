@@ -5,11 +5,16 @@
 </form>
 
 <div class="card">
-    <img class="card__image" src="/img/default.jpg" alt="User Profile">
-    <h1 class="card__title">Tsk</h1>
-    <div class="card__job">Student</div>
-    <p class="card__about">Olá! Eu sou Tanjil e sou um aluno da Escola Secundária Filipa de Vilhena.
-        Estou no curso profissional Técnico de Gestão e Programação de Sistemas Informáticos. Gosto de progamar, ouvir música, jogar e viajar pelo mundo!
+    {{#each rows}}
+    {{#if this.profile_image}}
+        <img class="card__image" src="{{this.profile_image}}" alt="User Profile">
+        {{else}}
+        <img class="card__image" src="/img/default.jpg" alt="User Profile">
+    {{/if}}
+    <h1 class="card__title">{{this.name}}</h1>
+    <div class="card__job">{{this.job_title}}</div>
+    <p class="card__about">{{this.description}}
     </p>
     <button type="button" class="btn btn-primary">View profile</button>
+    {{/each}}
 </div>
