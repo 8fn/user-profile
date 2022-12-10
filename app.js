@@ -8,6 +8,10 @@ const port = process.env.PORT || 5000;
 // Default option
 app.use(fileUpload());
 
+// Static files
+app.use(express.static('public'))
+app.use(express.static('upload'))
+
 // Templating engine
 const handlebars = exphbs.create({extname: '.hbs'})
 
